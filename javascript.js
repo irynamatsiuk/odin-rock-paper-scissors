@@ -1,9 +1,33 @@
-
 const allowedChoices = [
     "Rock",
     "Paper",
     "Scissors"
 ]
+
+// Create div for round result
+const resultDiv = document.createElement("div");
+document.querySelector(".container").appendChild(resultDiv);
+
+let userScore = 0;
+let computerScore = 0; 
+
+// Create  div for user\computer score
+const userScoreDiv = document.createElement("div");
+document.querySelector(".container").appendChild(userScoreDiv);
+
+const computerScoreDiv = document.createElement("div");
+document.querySelector(".container").appendChild(computerScoreDiv);
+
+// Winner of the game
+const winner = document.createElement("p");
+document.querySelector(".container").appendChild(winner);
+
+const rock = document.querySelector("#rock")
+const paper = document.querySelector("#paper");
+const scissors = document.querySelector("#scissors");
+
+// Set score to zero on page load
+resetScore();
 
 // Get random computer choice
 function getComputerChoice() {
@@ -11,28 +35,54 @@ function getComputerChoice() {
     return allowedChoices[randomIndex];
 }
 
-// Check if the user input valid
-function checkInput(input) {
-    return allowedChoices.indexOf(capitalize(input)) >= 0
-};
 
-// Capitalize user input
-function capitalize(text) {
-    return `${text[0].toUpperCase()}${text.slice(1).toLowerCase()}`
+// EventListeners for buttons (user's choise)
+rock.addEventListener("click", function() {
+    resetScore();
+    const computer = getComputerChoice();
+    const user = "Rock";
+    playRound(user, computer);
+    console.log(user,computer);
+    showGameResult();
+});
+
+paper.addEventListener("click", function() {
+    resetScore();
+    const computer = getComputerChoice();
+    const user = "Paper";
+    playRound(user, computer);
+    console.log(user,computer);
+    showGameResult();
+});
+
+scissors.addEventListener("click", function() {
+    resetScore();
+    const computer = getComputerChoice();
+    const user = "Scissors";
+    playRound(user, computer);
+    console.log(user,computer);
+    showGameResult();
+});
+
+// Shows round result in a div
+function out(element, text) {
+    element.textContent = text;
 }
 
+// Round result and scores update
 function winMessage(winner, loser) {
-    console.log(`You Won! ${winner} beats ${loser}`);
-    return 1
+    out(resultDiv, `You Won! ${winner} beats ${loser}`);
+    userScore += 1;
+    out(userScoreDiv, userScore);
 }
 
 function loseMessage(loser, winner) {
-    console.log(`You Lost! ${winner} beats ${loser}`);
-    return -1
+    out(resultDiv, `You Lost! ${winner} beats ${loser}`);
+    computerScore += 1;
+    out(computerScoreDiv, computerScore)
 }
 function tieMessage() {
-    console.log(`Tie!`);
-    return 0
+    out(resultDiv, `Tie!`);
 }
 
 
@@ -55,35 +105,21 @@ function playRound(playerSelection, computerSelection) {
 };
 
 
-let score = 0;
-for (let i = 0; i < 5; i++) {
 
-    const computer = getComputerChoice();
-    let input = prompt("Please fill in your selection");
-
-    if (checkInput(input)) {
-        score += playRound(capitalize(input), computer)
-        // console.log(typeof(roundResult))
-    } else {
-        alert("invalid input, try again");
+function showGameResult() {
+    if (userScore == 5) {
+        out(winner, "Player won the game!");  
+    } else if (computerScore == 5) {
+        out(winner, "Computer won the game!");
     }
 }
 
-function gameResult (scoreNew) {
-if (scoreNew > 0) {
-    console.log("You won the game");
-} else if (scoreNew === 0) {
-    console.log("Tie");
-} else {
-    console.log("You lost the game");
+function resetScore() {
+    if (computerScore == 5 || userScore == 5) {
+    userScore = 0;
+    computerScore = 0;
+    }
+    out(userScoreDiv, userScore);
+    out(computerScoreDiv, computerScore);
+    out(winner, "");
 }
-}
-
-
-gameResult(score);
-    
-    
-
-
-
-
